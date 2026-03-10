@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wargame: 수강신청 자동화</title>
+    <style>
+        body { font-family: 'Malgun Gothic', sans-serif; padding: 30px; background: #f0f2f5; }
+        .box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); max-width: 800px; margin: auto; }
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background: #333; color: white; }
+        #apply-btn:disabled { background: #ccc; cursor: not-allowed; } /* 잠긴 버튼 색상 */
+        .hidden { display: none; } /* 공격 로그 숨기기 전용 */
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h1>🎓 과목 수강신청 시스템</h1>
+        <p id="status" style="color: red;">상태: 🔒 현재 수강신청 기간이 아닙니다.</p>
+        
+        <table>
+            <tr><th>과목코드</th><th>과목명</th><th>상태</th></tr>
+            {% for c in courses %}
+            <tr><td>{{ c.id }}</td><td>{{ c.name }}</td><td>{{ c.status }}</td></tr>
+            {% endfor %}
+        </table>
+
+        <form action="/apply" method="POST">
+            <input type="text" name="courseCode" placeholder="공격 구문 입력" style="width:70%; padding:10px;">
+            <button type="submit" id="apply-btn" disabled>신청</button>
+        </form>
+
+        <div class="hidden">
+            {% for app in my_apps %}
+                {{ app | safe }}
+            {% endfor %}
+        </div>
+    </div>
+
+   <p id="status" style="color: red;">상태: 🔒 현재 수강신청 기간이 아닙니다.</p>
+
+<div style="display:none;">
+    {% for app in my_apps %}
+        {{ app | safe }}
+    {% endfor %}
+</div>
+
+<script>
+    window.onload = function() {
+        if (window.config && window.config.msg) {
+            const btn = document.getElementById('apply-btn');
+            const statusText = document.getElementById('status');
+
+            btn.disabled = false;
+            btn.style.backgroundColor = "green";
+            btn.innerText = "수강신청 가능";
+
+            statusText.innerText = "상태: ✅ w0w! Y0u gOT 4 e1iya'S Fl4G!";
+            statusText.style.color = "blue";
+            statusText.style.fontWeight = "bold";
+        }
+    };
+</script>
+</body>
+</html>
